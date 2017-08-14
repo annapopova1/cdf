@@ -25,12 +25,12 @@ define(["../lib/jquery", "./BaseComponent"], function($, BaseComponent) {
       var element = myself.placeholder().find("#" + myself.name);
 
       element.on("change", function() {
-        if (myself.dashboard.getParameterValue(myself.parameter) !== element.val()) {
+        if (myself._isParamValueDifferentFromElementValue(element)) {
           myself.dashboard.processChange(myself.name);
         }
       }).on("keyup", function(ev) {
-        if ((myself.refreshOnEveryKeyUp && myself.dashboard.getParameterValue(myself.parameter) !== element.val()) ||
-          (ev.keyCode === 13 && myself.dashboard.getParameterValue(myself.parameter) !== element.val())) {
+        if ((myself.refreshOnEveryKeyUp && myself._isParamValueDifferentFromElementValue(element)) ||
+          (ev.keyCode === 13 && myself._isParamValueDifferentFromElementValue(element))) {
           myself.dashboard.processChange(myself.name);
         }
       });
@@ -70,6 +70,10 @@ define(["../lib/jquery", "./BaseComponent"], function($, BaseComponent) {
         componentHTML += "<button id='" + this.name + "-btn-clear' class='" + this.clearButtonCssClass + "'></button>";
       }
       this.placeholder().html(componentHTML);
+    },
+
+    _isParamValueDifferentFromElementValue: function(element) {
+      return this.dashboard.getParameterValue(this.parameter) !== element.val();
     }
   });
 });
