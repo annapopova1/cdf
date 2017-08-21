@@ -51,7 +51,7 @@ define([
           /*el.focus();
           var $curValue = el.val();
           el.val('').val($curValue);*/
-          setCursor(el[0], myself.cursorPlace);
+          myself._setCursor(el[0], myself.cursorPlace);
         }, 0);
       }
     },
