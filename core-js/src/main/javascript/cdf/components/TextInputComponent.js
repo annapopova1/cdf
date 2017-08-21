@@ -31,6 +31,7 @@ define([
         }
       }).keyup(function(ev) {
         if((myself.refreshOnEveryKeyUp || ev.keyCode === 13) && myself._isValueChanged(el)) {
+          myself.cursorPlace = el[0].selectionStart;
           myself.dashboard.processChange(myself.name);
         }
       });
@@ -47,9 +48,10 @@ define([
       if (myself.refreshOnEveryKeyUp) {
         // Asynchronously reset focus in the same place
         setTimeout(function(){
-          el.focus();
+          /*el.focus();
           var $curValue = el.val();
-          el.val('').val($curValue);
+          el.val('').val($curValue);*/
+          setCursor(el[0], myself.cursorPlace);
         }, 0);
       }
     },
@@ -81,6 +83,23 @@ define([
 
     _isValueChanged: function(element) {
       return this.dashboard.getParameterValue(this.parameter) !== element.val();
+    },
+
+    _setCursor: function(node, pos){
+      if(!node){
+        return false;
+      }else if(node.createTextRange){
+        var textRange = node.createTextRange();
+        textRange.collapse(true);
+        textRange.moveEnd("character", pos);
+        textRange.moveStart("character", pos);
+        textRange.select();
+        return true;
+      }else if(node.setSelectionRange){
+        node.setSelectionRange(pos,pos);
+        return true;
+      }
+      return false;
     }
   });
 
